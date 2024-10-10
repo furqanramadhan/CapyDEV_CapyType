@@ -30,11 +30,25 @@ jobs:
           php-version: "8.3.10"
           tools: composer:2.7.7
 
-      - name: Copy .env
+      # Menambahkan langkah untuk debugging
+      - name: Display Composer Config
+        run: composer config --list --global
+
+      - name: Show Composer Version
+        run: composer --version
+
+      - name: Check PHP Version      - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: php -v
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Install Dependencies
+        run: composer install  # Hapus opsi --no-scripts dan --no-progress untuk pengujian
 
       - name: Generate key
         run: php artisan key:generate
