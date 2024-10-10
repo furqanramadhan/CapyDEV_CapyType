@@ -104,7 +104,7 @@ function initTyping() {
     wpmTag.innerText = wpm;
     mistakeTag.innerText = mistakes;
     cpmTag.innerText = charIndex - mistakes;
-    accuracyTag.innerText = accuracy;
+    accuracyTag.innerText = accuracy + "%";
   } else {
     if (timeLeft == 0 || charIndex == characters.length - 1) {
               let wpm = Math.round(((charIndex - mistakes) / 5) / (maxTime - timeLeft) * 60);
