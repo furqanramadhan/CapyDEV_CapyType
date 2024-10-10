@@ -37,14 +37,19 @@ jobs:
       - name: Show Composer Version
         run: composer --version
 
-      - name: Check PHP Version
+      - name: Check PHP Version      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
         run: php -v
 
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Install Dependencies
-        run: composer install # Hapus opsi --no-scripts dan --no-progress untuk pengujian
+        run: composer install  # Hapus opsi --no-scripts dan --no-progress untuk pengujian
+
       - name: Generate key
         run: php artisan key:generate
 
