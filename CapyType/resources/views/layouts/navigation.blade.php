@@ -17,7 +17,7 @@
         <span class="flex self-center text-3xl font-bold" style="font-size: 40px; color: #E5F7EF;"><a href="/">CapyType</a></span>
         <div class="flex items-center pl-10">
             <a href="/typing"><img src="{{ asset('assets/img/keyboard.png') }}" class="flex pr-2 mr-3" alt="Keyboard Icon" width="54"></a>
-            {{-- <a href="/about"><img src="{{ asset('assets/img/information.png') }}" class="flex pr-2 mr-3" alt="Information Icon" width="35"></a> --}}
+            <a href="/about"><img src="{{ asset('assets/img/information.png') }}" class="flex pr-2 mr-3" alt="Information Icon" width="35"></a>
             <a href="/leaderboard"><img src="{{ asset('assets/img/crown.png') }}" class="flex pr-2 mr-3" alt="Crown Icon" width="45"></a>
             
             {{-- <a href="/setting"><img src="{{ asset('assets/img/setting.png') }}" class="flex pr-2 mr-3" alt="Settings Icon" width="35"></a> --}}
@@ -40,7 +40,7 @@
     </div>
 
 </header>
-<!-- <footer class="flex justify-center pb-3" style="font-size: 20;" >
+<footer class="flex justify-center pb-3" style="font-size: 20;" >
     <div class="flex flex-wrap p-3">
         <a href="mailto:capytype@gmail.com" target="_blank" class="flex items-center justify-center">
             <img src="{{ asset('assets/img/envelope.png') }}" alt="Icon"
@@ -65,7 +65,7 @@
             <p class="mr-2 text-gray-500">support</p>
         </a>
     </div>
-</footer> -->
+</footer>
 </body>
 </html>
 
