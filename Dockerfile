@@ -25,6 +25,8 @@ RUN npm run build
 
 RUN composer install
 
+RUN composer clear-cache
+
 RUN cp .env.example .env
 
 RUN touch database/database.sqlite
