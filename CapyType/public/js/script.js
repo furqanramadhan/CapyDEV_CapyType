@@ -7,52 +7,55 @@ const typingText = document.querySelector(".typing-text p"),
   cpmTag = document.querySelector(".cpm span"),
   accuracyTag = document.querySelector(".accuracy span"),
   timeButtons = document.querySelectorAll(".flex button");
-  var custom;
-  let paragraph, counter;
+var custom;
+let paragraph, counter;
+var minAccuracy = 100; 
+var countMistake = 0;
+var lastMistake = 0;
 
 let timer,
   maxTime = 60,
   timeLeft = maxTime,
   charIndex = mistakes = isTyping = 0;
 
-  function custom() {
-    counter = 1;
-    var customWordsBtn = document.querySelector("#custom-words-btn");
-    var customWordsPopup = document.querySelector(".custom");
+function custom() {
+  counter = 1;
+  var customWordsBtn = document.querySelector("#custom-words-btn");
+  var customWordsPopup = document.querySelector(".custom");
 
-    custom = prompt("Enter your custom words:", "");
-    if (custom != null) {
-      paragraph = custom.value;
-      loadParagraph();
-      customWordsBtn.style.color = '#2ABA86';
-      customWordsPopup.style.display = 'none';
-    }
+  custom = prompt("Enter your custom words:", "");
+  if (custom != null) {
+    paragraph = custom.value;
+    loadParagraph();
+    customWordsBtn.style.color = '#2ABA86';
+    customWordsPopup.style.display = 'none';
   }
+}
 
 
-  function loadParagraph() {
-    paragraph = randomParagraph();
+function loadParagraph() {
+  paragraph = randomParagraph();
 
-    typingText.innerHTML = "";
-    let joinedParagraph = joinParagraph(paragraph, " ");
-    joinedParagraph.split("").forEach(char => {
-      let span = `<span>${char}</span>`;
-      typingText.innerHTML += span;
-    });
-    typingText.querySelectorAll("span")[0].classList.add("active");
-    document.addEventListener("keydown", () => inpField.focus());
-    typingText.addEventListener("click", () => inpField.focus());
-  }
+  typingText.innerHTML = "";
+  let joinedParagraph = joinParagraph(paragraph, " ");
+  joinedParagraph.split("").forEach(char => {
+    let span = `<span>${char}</span>`;
+    typingText.innerHTML += span;
+  });
+  typingText.querySelectorAll("span")[0].classList.add("active");
+  document.addEventListener("keydown", () => inpField.focus());
+  typingText.addEventListener("click", () => inpField.focus());
+}
 
 
 //function to make paragraph in string become random
 const randomParagraph = () => {
   const paragraphIndex = Math.floor(Math.random() * paragraphs.length);
   const words = paragraphs[paragraphIndex].split(" ").sort(() => Math.random() - 0.5);
-  if (counter == 1){
+  if (counter == 1) {
     return custom;
   }
-  else{
+  else {
     return words.join(" ");
   }
 };
@@ -95,10 +98,24 @@ function initTyping() {
     characters.forEach(span => span.classList.remove("active"));
     characters[charIndex].classList.add("active");
 
+    if(lastMistake != mistakes){
+      console.log("Last Mistake : " + lastMistake);
+      console.log("Mistake : " + mistakes);
+      if(lastMistake-1 != mistakes){
+        countMistake += Math.abs(lastMistake - mistakes);
+      }
+      
+      lastMistake = mistakes;
+    }
+    console.log("Salah : " + countMistake);
+    
+
+
     let wpm = Math.round(((charIndex - mistakes) / 5) / (maxTime - timeLeft) * 60);
     wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
 
-    let accuracy = Math.round(((charIndex - mistakes) / charIndex) * 100);
+    let accuracy = Math.round(((charIndex - countMistake) / charIndex) * 100);
+  
     accuracy = accuracy < 0 || !accuracy || accuracy === Infinity ? 0 : accuracy;
 
     wpmTag.innerText = wpm;
@@ -107,29 +124,30 @@ function initTyping() {
     accuracyTag.innerText = accuracy + "%";
   } else {
     if (timeLeft == 0 || charIndex == characters.length - 1) {
-              let wpm = Math.round(((charIndex - mistakes) / 5) / (maxTime - timeLeft) * 60);
-              wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
-              let accuracy = Math.round(((charIndex - mistakes) / charIndex) * 100);
-              // make an AJAX request to Laravel controller to store the values
-              $.ajax({
-                url: '/updateWPM',
-                type: 'get',
-                data: {
-                  wpm: wpm,
-                  accuracy: accuracy,
-                  _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                  console.log(response);
-                  console.log('WPM:', wpm);
-                  console.log('Accuracy:', accuracy);
-                  window.location.href = "/typing"
-                },
-                error: function(error) {
-                  console.log(error);
-                }
-              });
-            }
+      let wpm = Math.round(((charIndex - mistakes) / 5) / (maxTime - timeLeft) * 60);
+      wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
+      let accuracy = Math.round(((charIndex - mistakes) / charIndex) * 100);
+
+      // make an AJAX request to Laravel controller to store the values
+      $.ajax({
+        url: '/updateWPM',
+        type: 'get',
+        data: {
+          wpm: wpm,
+          accuracy: accuracy,
+          _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+          console.log(response);
+          console.log('WPM:', wpm);
+          console.log('Accuracy:', accuracy);
+          window.location.href = "/typing"
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      });
+    }
     clearInterval(timer);
     inpField.value = "";
   }
@@ -254,6 +272,8 @@ function resetGame() {
   mistakeTag.innerText = 0;
   cpmTag.innerText = 0;
   accuracyTag.innerText = 0;
+  countMistake = 0;
+  lastMistake = 0;
 }
 const btn15 = document.getElementById("btn-15");
 const btn30 = document.getElementById("btn-30");
