@@ -40,7 +40,7 @@
     </div>
 
 </header>
-<footer class="flex justify-center pb-3" style="font-size: 20;" >
+<!-- <footer class="flex justify-center pb-3" style="font-size: 20;" >
     <div class="flex flex-wrap p-3">
         <a href="mailto:capytype@gmail.com" target="_blank" class="flex items-center justify-center">
             <img src="{{ asset('assets/img/envelope.png') }}" alt="Icon"
@@ -65,7 +65,7 @@
             <p class="mr-2 text-gray-500">support</p>
         </a>
     </div>
-</footer>
+</footer> -->
 </body>
 </html>
 
